@@ -2,12 +2,14 @@ import express from "express";
 import axios from "axios";
 import sharp from "sharp";
 import { ndviFromBuffer } from "../utils/ndvi.js";
+import { validateCompareRequest } from "../utils/validation.js";
+
 
 const router = express.Router();
 
 // POST /api/analysis/compare
 // body: { beforeUrl, afterUrl } or { forest, beforeDate, afterDate }
-router.post("/compare", async (req, res) => {
+router.post("/compare", validateCompareRequest, async (req, res) => {
   try {
     const { beforeUrl, afterUrl, forest, beforeDate, afterDate } = req.body;
 
