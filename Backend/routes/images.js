@@ -1,11 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
-import { fetchGibsImage } from "../services/gibsService.js";
+import { fetchSentinelImage } from "../services/sentinelHubService.js";
 import { validateGibsRequest, getValidForests } from "../utils/validation.js";
 
 const router = express.Router();
 
-router.get("/forests", (req, res) => {
+router.get("/forests", (_req, res) => {
   res.json({
     forests: getValidForests(),
     count: getValidForests().length
@@ -15,20 +15,30 @@ router.get("/forests", (req, res) => {
 router.get("/gibs", validateGibsRequest, async (req, res) => {
   try {
     const { forest, date } = req.query;
-    const imgBuffer = await fetchGibsImage(forest, date);
-    if (!imgBuffer) return res.status(404).json({ 
-      error: "No image found for the specified forest and date"
-    });
-    res.setHeader("Content-Type", "image/jpeg");
+    console.log(`Fetching image for ${forest} on ${date}`);
+    
+    const imgBuffer = await fetchSentinelImage(forest, date);
+    if (!imgBuffer) {
+      console.log("No image buffer returned");
+      return res.status(404).json({ 
+        error: "No image found for the specified forest and date"
+      });
+    }
+    
+    // Check if it's SVG (placeholder) or JPEG (real image)
+    const isSvg = imgBuffer.toString('utf8', 0, 5) === '<?xml' || imgBuffer.toString('utf8', 0, 4) === '<svg';
+    console.log(`Returning ${isSvg ? 'SVG placeholder' : 'JPEG image'}`);
+    
+    res.setHeader("Content-Type", isSvg ? "image/svg+xml" : "image/jpeg");
     res.send(imgBuffer);
   } catch (err) {
-    console.error(err);
+    console.error("Error in /gibs route:", err);
     res.status(500).json({ error: "Server error", details: err.message });
   }
 });
 
 // Health check endpoint
-router.get("/health", (req, res) => {
+router.get("/health", (_req, res) => {
   res.json({ 
     status: "ok", 
     timestamp: new Date().toISOString(),

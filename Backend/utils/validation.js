@@ -1,7 +1,7 @@
 // Validation utility functions
 
 // Get list of valid forests from the service
-import { FOREST_BBOXES } from "../services/gibsService.js";
+import { FOREST_BBOXES } from "../services/sentinelHubService.js";
 
 /**
  * Validate date format (YYYY-MM-DD)
@@ -29,8 +29,8 @@ export function isValidDate(dateString) {
     return false;
   }
   
-  // Date should not be too old (e.g., before 2012 when VIIRS started)
-  const minDate = new Date('2012-01-01');
+  // Date should not be too old (Sentinel-2 started in 2015)
+  const minDate = new Date('2015-06-23');
   if (date < minDate) {
     return false;
   }
@@ -89,7 +89,7 @@ export function validateGibsRequest(req, res, next) {
   if (!date) {
     errors.push("'date' query parameter is required (format: YYYY-MM-DD)");
   } else if (!isValidDate(date)) {
-    errors.push("'date' must be in YYYY-MM-DD format, not in the future, and not before 2012-01-01");
+    errors.push("'date' must be in YYYY-MM-DD format, not in the future, and not before 2015-06-23 (Sentinel-2 launch date)");
   }
 
   if (errors.length > 0) {
@@ -133,10 +133,10 @@ export function validateCompareRequest(req, res, next) {
       errors.push(`'forest' must be one of: ${getValidForests().join(', ')}`);
     }
     if (!isValidDate(beforeDate)) {
-      errors.push("'beforeDate' must be in YYYY-MM-DD format, not in the future, and not before 2012-01-01");
+      errors.push("'beforeDate' must be in YYYY-MM-DD format, not in the future, and not before 2015-06-23");
     }
     if (!isValidDate(afterDate)) {
-      errors.push("'afterDate' must be in YYYY-MM-DD format, not in the future, and not before 2012-01-01");
+      errors.push("'afterDate' must be in YYYY-MM-DD format, not in the future, and not before 2015-06-23");
     }
     
     // Check that afterDate is after beforeDate
