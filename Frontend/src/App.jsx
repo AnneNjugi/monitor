@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Leaf, Calendar, BarChart3, MessageSquare, TrendingDown, AlertTriangle, CheckCircle, MapPin, Home, Filter } from 'lucide-react';
-import { fetchGibs, runCompare } from './api/api';
+import { fetchGibs, runCompare, submitContact } from './api/api';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('landing'); // 'landing', 'results', 'analysis'
@@ -154,13 +154,35 @@ function App() {
     setShowAnalysis(false);
   };
 
-  const handleContactSubmit = () => {
-    console.log('Contact submitted:', { contactName, contactEmail, contactMessage });
-    alert('Thank you for reaching out! We will get back to you soon.');
-    setShowContact(false);
-    setContactName('');
-    setContactEmail('');
-    setContactMessage('');
+  const handleContactSubmit = async () => {
+    // Validation
+    if (!contactName || !contactEmail || !contactMessage) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    if (contactMessage.length < 10) {
+      alert('Please provide a message with at least 10 characters');
+      return;
+    }
+
+    try {
+      const response = await submitContact({
+        name: contactName,
+        email: contactEmail,
+        message: contactMessage
+      });
+
+      alert(response.data.message || 'Thank you for reaching out! We will get back to you soon.');
+      setShowContact(false);
+      setContactName('');
+      setContactEmail('');
+      setContactMessage('');
+    } catch (error) {
+      console.error('Failed to submit contact form:', error);
+      const errorMessage = error.response?.data?.details || 'Failed to send message. Please try again.';
+      alert(errorMessage);
+    }
   };
 
   return (

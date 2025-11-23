@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 
 import imagesRouter from "./routes/images.js";
 import analysisRouter from "./routes/analysis.js";
+import contactRouter from "./routes/contact.js";
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ app.use("/api/", generalLimiter);
 // ROUTES
 app.use("/api/images", imagesRouter);
 app.use("/api/analysis", analysisLimiter, analysisRouter);
+app.use("/api/contact", contactRouter);
 
 const PORT = process.env.PORT || 5000;
 

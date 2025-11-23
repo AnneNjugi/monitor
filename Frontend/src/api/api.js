@@ -12,3 +12,7 @@ export const fetchGibs = (forest, date) =>
 // Run image comparison (supports URLs or forest+dates)
 export const runCompare = (payload) =>
   axios.post(`${BASE}/api/analysis/compare`, payload);
+
+// Submit contact form
+export const submitContact = (payload) =>
+  axios.post(`${BASE}/api/contact/submit`, payload);
