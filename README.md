@@ -402,9 +402,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Anne Njugi**
 - GitHub: [@AnneNjugi](https://github.com/AnneNjugi)
-- Email: [your-email@example.com]
-- LinkedIn: [Your LinkedIn]
-- Twitter: [@YourTwitter]
+- Email: [wangarinjugi254@gmail.com]
 
 ---
 
@@ -412,14 +410,14 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ### For General Inquiries
 - Use the contact form on the website
-- Email: [your-email@example.com]
+- Email: [wangarinjugi254@gmail.com]
 
 ### For Technical Issues
 - Open an issue on GitHub
 - Check existing issues first
 
 ### For Partnerships
-- Email: [partnerships@example.com]
+- Email: [wangarinjugi254@gmail.com]
 - Include "Partnership" in subject line
 
 ---
