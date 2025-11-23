@@ -76,8 +76,12 @@ function App() {
     setAfterImageUrl(null);
 
     try {
-      const beforeResp = await fetchGibs(selectedForest.name, beforeDate);
-      const afterResp = await fetchGibs(selectedForest.name, afterDate);
+      // Convert YYYY-MM to YYYY-MM-01 (first day of month)
+      const beforeFullDate = `${beforeDate}-01`;
+      const afterFullDate = `${afterDate}-01`;
+      
+      const beforeResp = await fetchGibs(selectedForest.name, beforeFullDate);
+      const afterResp = await fetchGibs(selectedForest.name, afterFullDate);
 
       // Detect content type from response
       const beforeContentType = beforeResp.headers['content-type'] || 'image/jpeg';
@@ -106,10 +110,14 @@ function App() {
     setAnalysisResult(null);
 
     try {
+      // Convert YYYY-MM to YYYY-MM-01 (first day of month)
+      const beforeFullDate = `${beforeDate}-01`;
+      const afterFullDate = `${afterDate}-01`;
+      
       const result = await runCompare({
         forest: selectedForest.name,
-        beforeDate: beforeDate,
-        afterDate: afterDate
+        beforeDate: beforeFullDate,
+        afterDate: afterFullDate
       });
 
       setAnalysisResult(result.data);
@@ -345,27 +353,21 @@ function App() {
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label className="block text-sm font-semibold mb-2 text-green-300">Before Date</label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-3 w-5 h-5 text-green-400" />
-                    <input
-                      type="date"
-                      value={beforeDate}
-                      onChange={(e) => setBeforeDate(e.target.value)}
-                      className="w-full bg-green-900 bg-opacity-40 border border-green-600 rounded-lg pl-12 pr-4 py-3 text-white focus:outline-none focus:border-green-400"
-                    />
-                  </div>
+                  <input
+                    type="month"
+                    value={beforeDate}
+                    onChange={(e) => setBeforeDate(e.target.value)}
+                    className="w-full bg-green-900 bg-opacity-40 border border-green-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-400"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold mb-2 text-green-300">After Date</label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-3 w-5 h-5 text-green-400" />
-                    <input
-                      type="date"
-                      value={afterDate}
-                      onChange={(e) => setAfterDate(e.target.value)}
-                      className="w-full bg-green-900 bg-opacity-40 border border-green-600 rounded-lg pl-12 pr-4 py-3 text-white focus:outline-none focus:border-green-400"
-                    />
-                  </div>
+                  <input
+                    type="month"
+                    value={afterDate}
+                    onChange={(e) => setAfterDate(e.target.value)}
+                    className="w-full bg-green-900 bg-opacity-40 border border-green-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-400"
+                  />
                 </div>
               </div>
 
